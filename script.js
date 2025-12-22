@@ -15,13 +15,6 @@ function getComputerChoice() {
     return computerChoice;
 }
 
-function getHumanChoice() {
-    let humanChoice = window.prompt();
-    humanChoice = String(humanChoice).toLowerCase();
-
-    return humanChoice;
-}
-
 function getWinner(humanChoice, computerChoice) {
     if (computerChoice === humanChoice) {
         return "Tie"
@@ -52,39 +45,53 @@ function getWinner(humanChoice, computerChoice) {
     }
 }
 
-function playRound() {
-    humanChoice = getHumanChoice();
+function playRound(humanChoice) {
+
+
     computerChoice = getComputerChoice();
 
     let roundWinner = getWinner(humanChoice, computerChoice);
     if (roundWinner === "human") {
-        console.log("You win!");
-        humanScore++;
+        output.textContent = "You win!";
+        humanScore++
+        updateScore();
     }
     else if (roundWinner === "computer") {
-        console.log("You lose!");
-        computerScore++;
+        output.textContent = "You lose!";
+        computerScore++
+        updateScore();
     }
     else if (roundWinner === "Tie") {
-        console.log("It's a tie!")
+        output.textContent = "It's a tie!";
     }
 }
 
-function playGame() {
-    while (humanScore != 3 && computerScore != 3) {
-        playRound()
-        console.log("Your score: " + humanScore);
-        console.log("Computer score: " + computerScore);
+function updateScore() {
+    if (humanScore != 3 && computerScore != 3) {
+        score.textContent = "Your score: " + humanScore + "\nComputer score: " + computerScore;
     }
-    if (humanScore === 3){
-        console.log("Congratulation!! You won the game")
+    if (humanScore === 3) {
+        score.textContent = "Congratulation!! You won the game";
+        humanScore = 0;
+        computerScore = 0;
     }
-    else if (computerScore === 3){
-        console.log("Game over! Computer won")
+    else if (computerScore === 3) {
+        score.textContent = "Game over! Computer won";
+        humanScore = 0;
+        computerScore = 0;
     }
 }
 
 let humanScore = 0
 let computerScore = 0
 
-playGame()
+const score = document.querySelector(".score");
+const output = document.querySelector(".output");
+const btnEleccion = document.querySelectorAll("button");
+
+btnEleccion.forEach((button) => {
+    button.addEventListener("click", (event) => {
+        humanChoice = event.target.value;
+        playRound(humanChoice);
+    });
+});
